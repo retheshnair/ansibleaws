@@ -1,0 +1,22 @@
+--- #  Basic Provisioning of an AMI from our Instance
+- hosts: localhost
+  connection: local
+  remote_user: vagrant
+  become: yes
+  gather_facts: no
+  vars_files:
+   - files/awscreds.yml
+  tasks:
+    - name: Copy AMI from one region to another
+      ec2_ami_copy:
+        aws_access_key: "{{ aws_id }}"
+        aws_secret_key: "{{ aws_key }}"
+        source_region: "{{ aws_region }}"
+        region: ap-southeast-2
+        source_image_id: ami-7536fe16
+        wait: no
+        name: ausami1
+        tags: 
+          Name: myausami1
+          Service: TestEastAMIService1
+      register: instance
